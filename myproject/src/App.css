@@ -1,0 +1,18 @@
+#root {
+  align-content: start;
+}
+
+.myList {
+  list-style: none;
+  margin-left: -50px;
+}
+
+.myList li {
+  display: inline-block;
+}
+
+.myList a {
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid blueviolet;
+}
