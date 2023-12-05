@@ -32,7 +32,7 @@ const Breadcrumbs = () => {
 
         return (
             <div>
-                <Breadcrumb items={items}/>
+                <Breadcrumb style={{margin: 10, fontSize: 17}} items={items}/>
             </div>
         );
     }

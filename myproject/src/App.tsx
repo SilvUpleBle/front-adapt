@@ -1,13 +1,13 @@
 import './App.css'
 import {Layout} from "antd";
-import Table from "./pages/Table.tsx";
-import Post from "./pages/Post.tsx";
+import Table from "./pages/post/Table.tsx";
+import Post from "./pages/post/card/Post.tsx";
 import {Routes, Route} from 'react-router-dom';
 import {Content} from "antd/es/layout/layout";
 import Breadcrumbs from "./components/Breadcrumbs.tsx";
 import MyNavBar from "./components/MyNavBar.tsx";
-import Main from "./pages/Main.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Main from "./pages/home/Main.tsx";
+import NotFound from "./pages/errors/NotFound.tsx";
 
 function App() {
 

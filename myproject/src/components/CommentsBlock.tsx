@@ -1,14 +1,19 @@
 import {useEffect, useState} from 'react';
 import axios from "axios";
-import {Skeleton} from "antd";
+import {Avatar, Card} from "antd";
+import Meta from "antd/es/card/Meta";
+
+export interface IComment {
+    postId: number,
+    id: number,
+    name: string,
+    email: string,
+    body: string
+}
 
 const CommentsBlock = (props: {postId: any}) => {
     const {postId} = props;
-    const [comments, setComments] = useState<{
-        name: string,
-        email: string,
-        body: string
-    }[] | null>(null)
+    const [comments, setComments] = useState<IComment[] | null>(null)
     useEffect(() => {
         axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
             .then(function (response) {
@@ -18,23 +23,31 @@ const CommentsBlock = (props: {postId: any}) => {
             .catch(response => {
                 console.log(`GET https://jsonplaceholder.typicode.com/comments?postId=${postId}  -  ${response}`);
             });
-    }, [props]);
+    }, []);
 
     return (
-        comments == undefined ?
-            <Skeleton active={true}/> :
-            comments?.length > 0 ? (
-                <>
-                    <h2>Комментарии:</h2>
-                    {comments?.map(comment => (
-                        <div key={comment.name} style={{margin: 10}}>
-                            <p style={{fontWeight: 'bold', marginBottom: -15}}>{comment.name}</p>
-                            <p style={{color: 'blue'}}>{comment.email}</p>
-                            <p style={{marginTop: -15}}>{comment.body}</p>
-                        </div>))}
-                </>
+        <Card title={<h2 style  ={{marginBottom: -5}}>Комментарии:</h2>} loading={comments == undefined}>
+            {comments != undefined && comments?.length > 0 ? (
+                    <>
+                        {comments?.map((comment, index) => (
+                            <Card key={comment.name}
+                                  style={{margin: 10}}
+                                  bordered={true}>
+                                <Meta
+                                    avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
+                                    title={
+                                        <div>
+                                            <p style={{fontWeight: 'bold', marginTop: 0}}>{comment.name}</p>
+                                            <p style={{marginTop: -15, color: 'blue'}}>{comment.email}</p>
+                                        </div>
+                                    }
+                                    description={<p style={{marginTop: -10, color: 'black'}}>{comment.body}</p>}
+                                />
+                            </Card>))}
+                    </>
                 ) :
-                <h3>Комментарии отсутствуют</h3>
+                <h3>Комментарии отсутствуют</h3>}
+        </Card>
     );
 };
 

@@ -1,15 +1,9 @@
 import React, {useState} from 'react';
-import {Button, Form, FormInstance, Input, Modal} from "antd";
+import {Button, Form, FormInstance, Input, Modal, notification} from "antd";
 import axios from "axios";
+import {IPost} from "../pages/post/card/Post.tsx";
 
-type IPost = {
-    title?: string;
-    body?: string;
-}
-
-
-
-const ModalCreatePost = (props: {data:{id:number, userId:number, title: string, body: string}[], setData: any}) => {
+const ModalCreatePost = (props: {data: IPost[], setData: any}) => {
 
     const {data, setData} = props;
     const getMaxIdFromData = () => {
@@ -36,15 +30,21 @@ const ModalCreatePost = (props: {data:{id:number, userId:number, title: string, 
     const updatePost = () => {
         setIsModalOpen(false);
 
-        axios.put(`https://jsonplaceholder.typicode.com/posts/${newId}`,
+        axios.post(`https://jsonplaceholder.typicode.com/posts`,
             [{
-                id: newId,
+                //id: newId,
                 userId: 0,
                 title: formRef.current?.getFieldValue('title'),
                 body: formRef.current?.getFieldValue('body')
             }])
-            .then(response => console.log(`PUT https://jsonplaceholder.typicode.com/posts/${newId}  -  ${response.status} ${response.statusText}`))
-            .catch(response => console.log(`PUT https://jsonplaceholder.typicode.com/posts/${newId}  -  ${response}`));
+            .then(response => {
+                console.log(`POST https://jsonplaceholder.typicode.com/posts  -  ${response.status} ${response.statusText}`);
+                notification.success({message: "Post successfully created!"});
+            })
+            .catch(response => {
+                console.log(`POST https://jsonplaceholder.typicode.com/posts  -  ${response}`);
+                notification.error({message: 'Something went wrong!'});
+            });
 
         const newPost = {
             id: newId,

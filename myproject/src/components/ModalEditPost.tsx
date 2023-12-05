@@ -1,13 +1,9 @@
 import React, {useState} from 'react';
-import {Button, Form, FormInstance, Input, Modal} from "antd";
+import {message, Button, Form, FormInstance, Input, Modal, notification} from "antd";
 import axios from "axios";
+import {IPost} from "../pages/post/card/Post.tsx";
 
-type IPost = {
-    title?: string;
-    body?: string;
-}
-
-const ModalEditPost = (props: { post: any; setPost: any; }) => {
+const ModalEditPost = (props: { post: IPost; setPost: any; }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {post, setPost} = props;
     const showModal = () => {
@@ -24,14 +20,20 @@ const ModalEditPost = (props: { post: any; setPost: any; }) => {
 
     const updatePost = () => {
         setIsModalOpen(false);
-
         axios.put(`https://jsonplaceholder.typicode.com/posts/${post.id}`,
             [{
                 title: formRef.current?.getFieldValue('title'),
                 body: formRef.current?.getFieldValue('body')
             }])
-            .then(response => console.log(`PUT https://jsonplaceholder.typicode.com/posts/${post.id}  -  ${response.status} ${response.statusText}`))
-            .catch(response => console.log(`PUT https://jsonplaceholder.typicode.com/posts/${post.id}  -  ${response}`));
+            .then(response => {
+                console.log(`PUT https://jsonplaceholder.typicode.com/posts/${post.id}  -  ${response.status} ${response.statusText}`);
+                notification.success({message: "Text successfully edited!"});
+            })
+            .catch(response => {
+                message.error("asdasd")
+                console.log(`PUT https://jsonplaceholder.typicode.com/posts/${post.id}  -  ${response}`);
+                notification.error({message: 'Something went wrong!'});
+            });
 
         const newPost = {
             id: post.id,
